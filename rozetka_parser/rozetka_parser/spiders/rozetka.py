@@ -24,3 +24,4 @@ class PhonePider(scrapy.Spider):
             'url': response.css('a.tabs__link::attr(href)').get()
         }
         yield phone_samsung_item
+
