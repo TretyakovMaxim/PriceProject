@@ -17,11 +17,10 @@ class PhonePider(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse)
 
     def parse_phone(self, response):
-        phone_samsung_item = PhoneSamsungItem()
-        phone_samsung_item = {
+        rozetka_item = PhoneSamsungItem()  # !
+        rozetka_item = {
             'model': response.css('h1.product__title::text').get(),
             'price': html.unescape(response.css('p.product-prices__big::text').get()),
             'url': response.css('a.tabs__link::attr(href)').get()
         }
-        yield phone_samsung_item
-
+        yield rozetka_item

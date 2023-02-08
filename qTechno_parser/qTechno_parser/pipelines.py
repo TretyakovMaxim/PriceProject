@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class RozetkaParserPipeline:
+class QtechnoParserPipeline:
     def __init__(self):
         ## Create/Connect to database
         self.con = sqlite3.connect('/home/tretyakov/PycharmProjects/PriceProject/phones.db')
@@ -11,7 +11,7 @@ class RozetkaParserPipeline:
 
         ## Create quotes table if none exists
         self.cur.execute("""
-        CREATE TABLE IF NOT EXISTS rozetka(
+        CREATE TABLE IF NOT EXISTS q_techno(
             model TEXT,
             price INTEGER,
             url TEXT
@@ -21,7 +21,7 @@ class RozetkaParserPipeline:
     def process_item(self, item, spider):
         ## Define insert statement
         self.cur.execute("""
-                    INSERT INTO rozetka (model, price, url) VALUES (?, ?, ?)
+                    INSERT INTO q_techno (model, price, url) VALUES (?, ?, ?)
                 """,
                          (
                              item['model'],
@@ -32,6 +32,3 @@ class RozetkaParserPipeline:
         ## Execute insert of data into database
         self.con.commit()
         return item
-
-
-

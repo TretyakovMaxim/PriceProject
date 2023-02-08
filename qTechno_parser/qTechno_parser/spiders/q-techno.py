@@ -1,10 +1,10 @@
 import scrapy
 import html
-# from ..items import PhoneSamsungItem
+from ..items import QtechnoParserItem
 
 
 class PhoneSpider(scrapy.Spider):
-    name = 'q-techno'
+    name = 'q_techno'
     start_urls = ['https://q-techno.com.ua/ru/shop/telefony-mobil-nye']
 
     def parse(self, response):
@@ -17,10 +17,10 @@ class PhoneSpider(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse)
 
     def parse_phone(self, response):
-        #  phone_samsung_item = PhoneSamsungItem()
-        phone_samsung_item = {
+        phone_q_techno_item = QtechnoParserItem()  # !
+        phone_q_techno_item = {
             'model': response.css('h1.dynamic-data-name::text').get(),
             'price': html.unescape(response.css('span.price::text').get()),
             'url': response.css('head > meta:nth-child(9)::attr(content)').get()
         }
-        yield phone_samsung_item
+        yield phone_q_techno_item
