@@ -17,7 +17,6 @@ class PhoneSpider(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse)
 
     def parse_phone(self, response):
-        phone_q_techno_item = QtechnoParserItem()  # !
         phone_q_techno_item = {
             'model': response.css('h1.dynamic-data-name::text').get(),
             'price': html.unescape(response.css('span.price::text').get()),
