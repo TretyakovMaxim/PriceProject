@@ -10,12 +10,13 @@ from bot_config import TOKEN_API
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(TOKEN_API)
+BOT = Bot(TOKEN_API)
+
 storage = MemoryStorage()
-dp = Dispatcher(bot, storage=storage)
+dp = Dispatcher(BOT, storage=storage)
 
 # Connection to DB
-con = sqlite3.connect('/home/tretyakov/PycharmProjects/PriceProject/phones.db')
+con = sqlite3.connect('phones.db')
 cursor = con.cursor()
 
 
@@ -26,15 +27,15 @@ class UserChoice(StatesGroup):
 # Greetings user
 @dp.message_handler(commands=['start'])
 async def greeting_user(message: types.Message):
-    await message.reply("Здравствуйте! Я бот для поиска мобильных телефонов по выгодным ценам.")
+    await message.answer("👋🏻Здравствуйте! Я бот для поиска мобильных телефонов по выгодным ценам.")
     time.sleep(2)
-    await message.reply('Пожалуйста укажите марку и модель искомого телефона, к примеру "Samsung Galaxy A33" или '
-                        '"iPhone 13" ')
+    await message.answer('Пожалуйста укажите марку и модель искомого телефона, к примеру "Samsung Galaxy A33" или '
+                         '"iPhone 13" ')
 
 
 @dp.message_handler()
 async def phone_model(message: types.Message, state: FSMContext):
-    await message.answer('Идёт поск, пожалуйста подождите немного.')
+    await message.answer('Идёт поск, пожалуйста подождите немного🔎.')
 
     user_model = message.text
     query = f"""SELECT model FROM rozetka WHERE model LIKE '%{user_model}%'  
@@ -47,7 +48,7 @@ async def phone_model(message: types.Message, state: FSMContext):
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
     for btn in button_names:
         kb.add(KeyboardButton(btn[0]))
-    await message.answer(text="Вибирите модель из приведённых ниже:",
+    await message.answer(text="Вибирите модель из приведённых ниже👇:",
                          reply_markup=kb)
     await UserChoice.user_choice.set()
 
@@ -62,7 +63,8 @@ async def user_chosen(message: types.Message, state: FSMContext):
                 SELECT url FROM q_techno WHERE model LIKE '%{user_message}%'"""
         cursor.execute(url_query)
         url = cursor.fetchall()
-        await message.reply(f"Вот ваша ссылка: {url[0]}")
+        await message.reply(f"Вот ваша ссылка: {url[0][0]}")
+        await state.finish()
 
 
 if __name__ == "__main__":
