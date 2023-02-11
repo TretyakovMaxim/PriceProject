@@ -4,7 +4,7 @@ import sqlite3
 class QtechnoParserPipeline:
     def __init__(self):
         ## Create/Connect to database
-        self.con = sqlite3.connect('/home/tretyakov/PycharmProjects/PriceProject/phones.db')
+        self.con = sqlite3.connect('phones.db')
 
         ## Create cursor, used to execute commands
         self.cur = self.con.cursor()
@@ -20,9 +20,7 @@ class QtechnoParserPipeline:
 
     def process_item(self, item, spider):
         ## Define insert statement
-        self.cur.execute("""
-                    INSERT INTO q_techno (model, price, url) VALUES (?, ?, ?)
-                """,
+        self.cur.execute("""INSERT INTO q_techno (model, price, url) VALUES (?, ?, ?)""",
                          (
                              item['model'],
                              item['price'],

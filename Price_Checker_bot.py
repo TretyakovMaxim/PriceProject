@@ -1,6 +1,7 @@
 import logging
 import time
 import sqlite3
+import re
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
@@ -38,16 +39,16 @@ async def phone_model(message: types.Message, state: FSMContext):
     await message.answer('Идёт поск, пожалуйста подождите немного🔎.')
 
     user_model = message.text
-    query = f"""SELECT model FROM rozetka WHERE model LIKE '%{user_model}%'  
-                UNION 
-                SELECT model FROM q_techno WHERE model LIKE '%{user_model}%'"""
-    cursor.execute(query)
+    query = """SELECT model FROM rozetka WHERE model LIKE ? 
+               UNION 
+               SELECT model FROM q_techno WHERE model LIKE ?"""
+    cursor.execute(query, ('%' + user_model + '%', '%' + user_model + '%'))
     button_names = cursor.fetchall()
     time.sleep(1.500)
 
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
     for btn in button_names:
-        kb.add(KeyboardButton(btn[0]))
+        kb.add(KeyboardButton(re.sub(r'\s*\([^)]*\)', '', btn[0])))
     await message.answer(text="Вибирите модель из приведённых ниже👇:",
                          reply_markup=kb)
     await UserChoice.user_choice.set()
@@ -58,10 +59,10 @@ async def user_chosen(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['text'] = message.text
         user_message = data['text']
-        url_query = f"""SELECT url FROM rozetka WHERE model LIKE '%{user_message}%'  
+        url_query = f"""SELECT url FROM rozetka WHERE model LIKE ?  
                 UNION 
-                SELECT url FROM q_techno WHERE model LIKE '%{user_message}%'"""
-        cursor.execute(url_query)
+                SELECT url FROM q_techno WHERE model LIKE ?"""
+        cursor.execute(url_query, ('%' + user_message + '%', '%' + user_message + '%'))
         url = cursor.fetchall()
         await message.reply(f"Вот ваша ссылка: {url[0][0]}")
         await state.finish()

@@ -4,7 +4,7 @@ import sqlite3
 class RozetkaParserPipeline:
     def __init__(self):
         ## Create/Connect to database
-        self.con = sqlite3.connect('/home/tretyakov/PycharmProjects/PriceProject/phones.db')
+        self.con = sqlite3.connect('phones.db')
 
         ## Create cursor, used to execute commands
         self.cur = self.con.cursor()
@@ -32,6 +32,3 @@ class RozetkaParserPipeline:
         ## Execute insert of data into database
         self.con.commit()
         return item
-
-
-

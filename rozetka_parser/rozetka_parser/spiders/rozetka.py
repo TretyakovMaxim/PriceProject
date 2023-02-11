@@ -17,9 +17,9 @@ class PhonePider(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse)
 
     def parse_phone(self, response):
-        rozetka_item = {
+        yield {
             'model': response.css('h1.product__title::text').get(),
             'price': html.unescape(response.css('p.product-prices__big::text').get()),
             'url': response.css('a.tabs__link::attr(href)').get()
         }
-        yield rozetka_item
+
