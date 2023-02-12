@@ -18,7 +18,7 @@ After the release, you will be able to try the bot  [here](https://t.me/PriceChe
 ### Assembly of the repository and local launch.
 ***
 ```
-git clone https://
+git clone https://github.com/TretyakovMaxim/PriceProject.git
 pip install -r requirments.txt
 ```
 ### Configuration.
