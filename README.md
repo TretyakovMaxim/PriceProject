@@ -19,7 +19,7 @@ After the release, you will be able to try the bot  [here](https://t.me/PriceChe
 ***
 ```
 git clone https://github.com/TretyakovMaxim/PriceProject.git
-pip install -r requirments.txt
+pip install -r ./PriceProject/requirments.txt
 ```
 ### Configuration.
 ***
